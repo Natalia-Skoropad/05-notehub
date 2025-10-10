@@ -1,0 +1,55 @@
+.button {
+  font-size: 16px;
+  font-weight: 400;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 30px;
+  min-width: 120px;
+  padding: 6px 12px;
+
+  border-radius: 4px;
+
+  transition: background-color 0.2s ease;
+}
+
+.normal {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.normal:hover,
+.normal:focus {
+  background-color: #0b5ed7;
+}
+
+.normal:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.cancel {
+  background-color: #f8f9fa;
+  color: #212529;
+  border: 1px solid #ced4da;
+}
+
+.cancel:hover,
+.cancel:focus {
+  background-color: #e2e6ea;
+}
+
+.delete {
+  align-self: flex-end;
+  font-size: 14px;
+  min-width: 80px;
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete:hover,
+.delete:focus {
+  background-color: #bb2d3b;
+}
