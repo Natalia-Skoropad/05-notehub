@@ -4,15 +4,8 @@ import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
 import { useDebouncedSearch } from '../../hooks/useDebouncedSearch';
 
-import {
-  NoteList,
-  Button,
-  Loader,
-  ErrorMessage,
-  Pagination,
-  Modal,
-  SearchBox,
-} from '../../index';
+import { NoteList, Loader, ErrorMessage, Modal } from '../../index';
+import Header from './Header';
 
 import css from './App.module.css';
 
@@ -45,27 +38,17 @@ function App() {
 
   return (
     <div className={css.app}>
-      <header className={css.toolbar} aria-label="Notes toolbar">
-        <SearchBox
-          value={notesSearchInput}
-          onChange={handleNotesSearch}
-          maxLength={50}
-        />
-
-        {totalPages > 1 && (
-          <Pagination
-            pageCount={totalPages}
-            currentPage={page}
-            onPageChange={setPage}
-          />
-        )}
-
-        <Button text="Create note +" onClick={() => setIsModalOpen(true)} />
-      </header>
+      <Header
+        searchValue={notesSearchInput}
+        onSearchChange={handleNotesSearch}
+        totalPages={totalPages}
+        currentPage={page}
+        onPageChange={setPage}
+        onOpenCreate={() => setIsModalOpen(true)}
+      />
 
       {(isLoading || isFetching) && <Loader label="Loading notes…" />}
       {isError && <ErrorMessage message={errMsg} />}
-
       {items.length > 0 && <NoteList items={items} />}
 
       {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
