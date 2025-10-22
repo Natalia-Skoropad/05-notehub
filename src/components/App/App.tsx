@@ -4,8 +4,16 @@ import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
 import { useDebouncedSearch } from '../../hooks/useDebouncedSearch';
 
-import { NoteList, Loader, ErrorMessage, Modal } from '../../index';
-import Header from './Header';
+import {
+  NoteList,
+  Loader,
+  ErrorMessage,
+  Modal,
+  SearchBox,
+  Pagination,
+  Button,
+  NoteForm,
+} from '../../index';
 
 import css from './App.module.css';
 
@@ -32,26 +40,43 @@ function App() {
     placeholderData: keepPreviousData,
   });
 
-  const items = data?.items ?? [];
+  const notes = data?.items ?? [];
   const totalPages = data?.totalPages ?? 0;
   const errMsg = error instanceof Error ? error.message : undefined;
 
   return (
     <div className={css.app}>
-      <Header
-        searchValue={notesSearchInput}
-        onSearchChange={handleNotesSearch}
-        totalPages={totalPages}
-        currentPage={page}
-        onPageChange={setPage}
-        onOpenCreate={() => setIsModalOpen(true)}
-      />
+      <header className={css.toolbar} aria-label="Notes toolbar">
+        <SearchBox
+          value={notesSearchInput}
+          onChange={handleNotesSearch}
+          maxLength={50}
+        />
+
+        {totalPages > 1 && (
+          <Pagination
+            pageCount={totalPages}
+            currentPage={page}
+            onPageChange={setPage}
+          />
+        )}
+
+        <Button text="Create note +" onClick={() => setIsModalOpen(true)} />
+      </header>
 
       {(isLoading || isFetching) && <Loader label="Loading notes…" />}
       {isError && <ErrorMessage message={errMsg} />}
-      {items.length > 0 && <NoteList items={items} />}
 
-      {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
+      {notes.length > 0 && <NoteList notes={notes} />}
+
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <NoteForm
+            onCancel={() => setIsModalOpen(false)}
+            onSuccess={() => setIsModalOpen(false)}
+          />
+        </Modal>
+      )}
     </div>
   );
 }
